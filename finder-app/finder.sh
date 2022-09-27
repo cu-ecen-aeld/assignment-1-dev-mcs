@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Expected args: $1 - files path, $2 - search string text 
 if [ ! $# -eq 2 ]
@@ -20,9 +20,19 @@ fi
 
 #  grep for the string in the file, -c count, -r recursive
 matchinglines=$(grep -r "${searchstr}" "${filesdir}" | wc -l)
+if [ ! $? -eq 0 ]
+then
+	echo "Cannot grep for matvching lines";
+	exit 1;
+fi
 
 # another search for matching files then pipe into wc to get a line count.
 filesfound=$(grep -r -l "${searchstr}" "${filesdir}" | wc -l)
+if [ ! $? -eq 0 ]
+then
+	echo "Cannot grep for files found";
+	exit 1;
+fi
 
 echo "The number of files are ${filesfound} and the number of matching lines are ${matchinglines}"
 
